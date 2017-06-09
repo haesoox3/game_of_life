@@ -118,7 +118,7 @@
  */
 function tick(present, future, rules = conway){
   for (var i = 0; i < present.cells.length; i++){
-    var [row, col] = [i/present.width, i%present.width];
+    var [row, col] = [Math.floor(i/present.width), i%present.width];
     if (rules(present.get([row, col]), present.livingNeighbors([row, col]))){
       future.set([row, col], 1);
     }
@@ -128,7 +128,6 @@ function tick(present, future, rules = conway){
   }
   return [future, present];
 }
-
 
 
 

@@ -4,8 +4,13 @@ if (mainElement) {
 
   // Connect #step_btn to the step function
   document.getElementById('step_btn')
-    .addEventListener('click', game.step)
-
+  .addEventListener('click', game.step);
+  document.getElementById('play_btn')
+  .addEventListener('click', game.play);
+  document.getElementById('reset_btn')
+  .addEventListener('click', game.random);
+  document.getElementById('clear_btn')
+  .addEventListener('click', game.clear);
   // TODO: Connect other buttons.
 }
 
@@ -43,16 +48,16 @@ function Life(container, width=12, height=12) {
       }
       table.appendChild(tr);                           //   </tr>
     }                                                  //  </table>
-    return table    
+    return table;    
   }
   
   function toggleCellFromEvent(event) {
     // FIXME: This currently always toggles cell (0, 0).
     // How do we get the coordinate of the cell that was clicked on?
     // HINT: https://developer.mozilla.org/en-US/docs/Web/API/Event/target
-    var cell = document.getElementById('0-0'); // ⬅️ Fix me
-    present.toggle(cell.coord)
-    paint()
+    var cell = document.getElementById(event.target.id); // ⬅️ Fix me
+    present.toggle(cell.coord);
+    paint();
   }
 
   function paint() {
@@ -67,6 +72,13 @@ function Life(container, width=12, height=12) {
     // HINT:
     //   https://developer.mozilla.org/en-US/docs/Web/API/Element/classList
     //   https://developer.mozilla.org/en-US/docs/Web/API/Element/getElementsByTagName
+    var cells = table.getElementsByTagName("td"); 
+    for (var i=0; i<cells.length; i++){
+      console.log(document.getElementById(cells[i].id).coord);
+      if (present.get(document.getElementById(cells[i].id).coord) === 1){
+        cells[i].classList.add("alive");
+      }
+    }
   }
 
   function step() {
