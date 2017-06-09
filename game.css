@@ -1,9 +1,13 @@
 body {
   padding: 10px;
+  background-color: gray;
 }
 
 h1, h2 {
   text-align: center;
+  color: white;
+  font-family: fantasy;
+  font-size: 10;
 }
 
 .board {
@@ -12,19 +16,29 @@ h1, h2 {
 
 .board td{
   border: 1px solid #ddd;
-  width: 18px;
-  height: 18px;
+  width: 50px;
+  height: 50px;
+  background-color: #34675C;
+
 }
 
 td.alive {
-  background-color: #6728B2;
+  background-color: #50E3C2;
 }
 
 td.dead {
-  background-color: #fff;
+
 }
 
 #control_panel {
   margin: 10px auto;
   text-align: center;
+}
+
+.footer{
+  font-family: fantasy;
+}
+
+.btn{
+  font-family: fantasy;
 }
