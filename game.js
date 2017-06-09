@@ -6,7 +6,7 @@ if (mainElement) {
   document.getElementById('step_btn')
   .addEventListener('click', game.step);
   document.getElementById('play_btn')
-  .addEventListener('click', game.play);
+  .addEventListener('click', game.togglePlaying);
   document.getElementById('reset_btn')
   .addEventListener('click', game.random);
   document.getElementById('clear_btn')
@@ -24,6 +24,7 @@ function Life(container, width=12, height=12) {
 
   // Create a <table> to hold our cells.
   var table = createTable();
+  var timer, playing = false; 
   
   // Put the table in our container
   container.appendChild(table);
@@ -74,17 +75,19 @@ function Life(container, width=12, height=12) {
     //   https://developer.mozilla.org/en-US/docs/Web/API/Element/getElementsByTagName
     var cells = table.getElementsByTagName("td"); 
     for (var i=0; i<cells.length; i++){
-      console.log(document.getElementById(cells[i].id).coord);
       if (present.get(document.getElementById(cells[i].id).coord) === 1){
         cells[i].classList.add("alive");
+      }
+      else{
+        cells[i].classList.remove("alive");
       }
     }
   }
 
   function step() {
     // Hello, destructuring assignment:
-    //   https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment
-    ;[present, future] = tick(present, future);  // tick is from board.js
+    //   https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment\
+    [present, future] = tick(present, future);  // tick is from board.js
     // ⬆️ Why is there a semicolon at the beginning of this line?
     //
     // It's not necessary, but we have it there to avoid a confusing problem.
@@ -119,7 +122,8 @@ function Life(container, width=12, height=12) {
     // TODO:
     // Start playing by running the `step` function    
     // automatically repeatedly every fixed time interval
-    
+    playing = true;
+    timer = setInterval(step, 500);
     // HINT:
     // https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setInterval
   }
@@ -128,18 +132,31 @@ function Life(container, width=12, height=12) {
     // TODO: Stop autoplay.
     // HINT:
     // https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/clearInterval
+    playing = false;
+    clearInterval(timer);
   }
 
   function togglePlaying() {
     // TODO: If we're playing, stop. Otherwise, start playing.
+    if (playing){
+      stop();
+   } else{
+    play();
+   }
   }
 
   function clear() {
     // TODO: Clear the board
+    function everythingDies() { return false }
+    [present, future] = tick(present, future, everythingDies);
+    paint();
   }
 
   function random() {
     // TODO: Randomize the board
+    function randomize() {return (Math.floor(Math.random()*2)===1) ? true : false}
+    [present, future] = tick(present, future, randomize);
+    paint();
   }
 
   return {play, step, stop, togglePlaying, random, clear}
