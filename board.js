@@ -57,7 +57,7 @@
  Board.prototype.set = function(coords, value) {
   // TODO
   var [row,col] = coords; 
-  this.cells[row*this.width + col] = value; 
+  this.cells[this.indexFor(coords)] = value; 
 }
 
 /**
@@ -88,7 +88,7 @@
  Board.prototype.toggle = function(coords) {
   // TODO
   var [row,col] = coords; 
-  this.cells[row*this.width + col] = !this.get(coords); 
+  this.cells[this.indexFor(coords)] = !this.get(coords); 
 }
 
 /**
@@ -116,20 +116,16 @@
  * @param {Board!} future (is mutated)
  * @param {(Boolean, Int) -> Boolean} rules (default: conway)
  */
- function tick(present, future, rules=conway) {
-  for(var i = 0; i<present.cells.length; i++){
-    var [row, col] = [i/this.width, i%this.width];
-    if(rules(present.cells[i], present.livingNeighbors([row, col]))){
-      future.cells[i] = 1;
-      // future.set([row, col], 1);
-      // console.log(future.cells);
-    } else {
-      future.cells[i] = 0;
-      // future.set([row, col], 0);
+function tick(present, future, rules = conway){
+  for (var i = 0; i < present.cells.length; i++){
+    var [row, col] = [i/present.width, i%present.width];
+    if (rules(present.get([row, col]), present.livingNeighbors([row, col]))){
+      future.set([row, col], 1);
+    }
+    else {
+      future.set([row, col], 0);
     }
   }
-  //console.log('present: ', present.cells);
-  //console.log('future: ', future.cells);
   return [future, present];
 }
 
